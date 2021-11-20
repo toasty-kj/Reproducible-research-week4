@@ -14,7 +14,7 @@ library(ggplot2)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#download files and read it
+download files and read it
 ```{r, cache=TRUE}
 Sys.setlocale(category = "LC_TIME", "C")
 Sys.setenv("LANGUAGE"="e")
@@ -25,15 +25,15 @@ NOAA_data <- read.csv("NOAA_data.csv.bz2")
 names(NOAA_data)
 ```
 ## Data Processing
-#Across the US, which types of events are most harmful with respect to population health?
-#calculate mean value for each event type by aggregate function
+Across the US, which types of events are most harmful with respect to population health?
+calculate mean value for each event type by aggregate function
 ```{r, cache=TRUE}
 fatalities_byevent <- aggregate(FATALITIES ~ EVTYPE, data = NOAA_data, mean, na.rm = TRUE)
 injuries_byevent <- aggregate(INJURIES ~ EVTYPE, data = NOAA_data, mean, na.rm = TRUE)
 
 ```
 
-#Across the US, which types of events have the greatest economic consequences?
+Across the US, which types of events have the greatest economic consequences?
 convert unit k and m into actual numbers
 ```{r, cache=TRUE}
 # mutate new column reflecting units thousand K and million M
@@ -56,7 +56,7 @@ for (i in 1:length(NOAA_data)){
 head(NOAA_data)
 ```
 
-#calculate mean value for each event type by aggregate function
+calculate mean value for each event type by aggregate function
 ```{r, cache=TRUE}
 propdmg_byevent <- aggregate(PROPDMGNM ~ EVTYPE, data = NOAA_data, mean, na.rm = TRUE)
 cropdmg_byevent <- aggregate(CROPDMGNM ~ EVTYPE, data = NOAA_data, mean, na.rm = TRUE)
@@ -64,8 +64,9 @@ summary(propdmg_byevent)
 summary(cropdmg_byevent)
 ```
 
-##Results
-#Across the US, which types of events are most harmful with respect to population health?
+
+## Results
+Across the US, which types of events are most harmful with respect to population health?
 ```{r, cache=TRUE}
 summary(fatalities_byevent)
 summary(injuries_byevent)
@@ -75,9 +76,44 @@ fatalities_byevent$EVTYPE[which.max(fatalities_byevent$FATALITIES)]
 injuries_byevent$EVTYPE[which.max(injuries_byevent$INJURIES)]
 ```
 
-#find which types of event have the greatest economic consequences
+find which types of event have the greatest economic consequences
 ```{r, cache=TRUE}
 propdmg_byevent$EVTYPE[which.max(propdmg_byevent$PROPDMGNM)]
 cropdmg_byevent$EVTYPE[which.max(cropdmg_byevent$CROPDMGNM)]
 ```
 
+##What are top 5 harmful event with respect to health and economics
+```{r, cache=TRUE}
+fatalities_byevent_desc <- arrange(fatalities_byevent, desc(FATALITIES))
+injuries_byevent_desc <- arrange(injuries_byevent, desc(INJURIES))
+propdmg_byevent_desc <- arrange(propdmg_byevent, desc(PROPDMGNM))
+cropdmg_byevent_desc <- arrange(cropdmg_byevent, desc(CROPDMGNM))
+
+```
+
+#Top10 events caused highest property damage
+```{r, cache=TRUE}
+top10_events_prop <- head(propdmg_byevent_desc, 10)
+
+ggplot(top10_events_prop, aes(reorder(EVTYPE,PROPDMGNM),PROPDMGNM))+ geom_col(aes(fill = PROPDMGNM)) + scale_fill_gradient2(low = "white", high = "blue") + coord_flip() + theme_classic() + labs(y = "Property damage", x = "Event Type") + ggtitle("Top10 events caused highest property damage")
+```
+
+#Top10 events caused highest crop damage
+
+```{r, cache=TRUE}
+top10_events_crops <- head(arrange(cropdmg_byevent,desc(CROPDMGNM)), 10)
+ggplot(top10_events_crops, aes(reorder(EVTYPE,CROPDMGNM),CROPDMGNM))+ geom_col(aes(fill = CROPDMGNM)) + scale_fill_gradient2(low = "white", high = "red") + coord_flip() + theme_classic() + labs(y = "Crop damage", x = "Event Type") + ggtitle("Top10 events caused highest crop damage")
+```
+
+#Top10 harmful events with fatalities
+
+```{r, cache=TRUE}
+top10_events_fatalities <- head(arrange(fatalities_byevent, desc(FATALITIES)), 10)
+ggplot(top10_events_fatalities, aes(reorder(EVTYPE,FATALITIES),FATALITIES))+ geom_col(aes(fill = FATALITIES)) + scale_fill_gradient2(low = "white", high = "black") + coord_flip() + theme_classic() + labs(y = "FATALITIES", x = "Event Type") + ggtitle("Top10 harmful events with fatalities")
+```
+#Top10 harmful events with INJURIES
+
+```{r, cache=TRUE}
+top10_events_injuries <- head(arrange(injuries_byevent, desc(INJURIES)), 10)
+ggplot(top10_events_injuries, aes(reorder(EVTYPE,INJURIES),INJURIES))+ geom_col(aes(fill = INJURIES)) + scale_fill_gradient2(low = "white", high = "purple") + coord_flip() + theme_classic() + labs(y = "INJURIES", x = "Event Type") + ggtitle("Top10 harmful events with INJURIES")
+```
