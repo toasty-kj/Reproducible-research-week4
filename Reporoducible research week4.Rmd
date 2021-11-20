@@ -3,11 +3,13 @@ title: "Reproducible research course project week4"
 author: "Koji"
 date: "2021/11/15"
 output: 
-html_document: 
-keep_md: true
+  html_document: 
+    keep_md: true
 ---
 
 ```{r setup, include=FALSE}
+library(dplyr)
+library(ggplot2)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -29,8 +31,8 @@ names(NOAA_data)
 #Across the United States, which types of events have the greatest economic consequences?
 
 #Across the US, which types of events are most harmful with respect to population health?
-
-```{r}
+#calculate mean value for each event type by aggregate function
+```{r, cache=TRUE}
 fatalities_byevent <- aggregate(FATALITIES ~ EVTYPE, data = NOAA_data, mean, na.rm = TRUE)
 injuries_byevent <- aggregate(INJURIES ~ EVTYPE, data = NOAA_data, mean, na.rm = TRUE)
 summary(fatalities_byevent)
@@ -42,7 +44,40 @@ injuries_byevent$EVTYPE[which.max(injuries_byevent$INJURIES)]
 ```
 
 #Across the US, which types of events have the greatest economic consequences?
+convert unit k and m into actual numbers
 ```{r, cache=TRUE}
+# mutate new column reflecting units thousand K and million M
+NOAA_data <- mutate(NOAA_data, PROPDMGNM = PROPDMG)
+NOAA_data <- mutate(NOAA_data, CROPDMGNM = CROPDMG)
+for (i in 1:length(NOAA_data)){
+  if (NOAA_data$PROPDMGEXP[i] == "K"){
+    NOAA_data$PROPDMGNM[i] <- NOAA_data$PROPDMG[i] * 1000
+    if (NOAA_data$PROPDMGEXP[i] == "M"){
+      NOAA_data$PROPDMGNM[i] <- NOAA_data$PROPDMG[i] * 1000000
+    }
+  }
+ if (NOAA_data$CROPDMGEXP[i] == "K"){
+    NOAA_data$CROPDMGNM[i] <- NOAA_data$CROPDMG[i] * 1000
+    if (NOAA_data$CROPDMGEXP[i] == "M"){
+      NOAA_data$CROPDMGNM[i] <- NOAA_data$CROPDMG[i] * 1000000
+    }
+ }
+}
+head(NOAA_data)
+```
+
+#calculate mean value for each event type by aggregate function
+```{r, cache=TRUE}
+propdmg_byevent <- aggregate(PROPDMGNM ~ EVTYPE, data = NOAA_data, mean, na.rm = TRUE)
+cropdmg_byevent <- aggregate(CROPDMGNM ~ EVTYPE, data = NOAA_data, mean, na.rm = TRUE)
+summary(propdmg_byevent)
+summary(cropdmg_byevent)
+```
+
+#find which types of event have the greatest economic consequences
+```{r, cache=TRUE}
+propdmg_byevent$EVTYPE[which.max(propdmg_byevent$PROPDMGNM)]
+cropdmg_byevent$EVTYPE[which.max(cropdmg_byevent$CROPDMGNM)]
 
 ```
 
