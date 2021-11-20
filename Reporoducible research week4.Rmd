@@ -2,7 +2,9 @@
 title: "Reproducible research course project week4"
 author: "Koji"
 date: "2021/11/15"
-output: html_document
+output: 
+html_document: 
+keep_md: true
 ---
 
 ```{r setup, include=FALSE}
@@ -10,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 #download files and read it
-```{r}
+```{r, cache=TRUE}
 Sys.setlocale(category = "LC_TIME", "C")
 Sys.setenv("LANGUAGE"="e")
 path <- getwd()
@@ -18,4 +20,29 @@ url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2
 download.file(url, file.path(path, "NOAA_data.csv.bz2"))
 NOAA_data <- read.csv("NOAA_data.csv.bz2")
 summary(NOAA_data)
+head(NOAA_data, 5)
+names(NOAA_data)
 ```
+
+#Across the United States, which types of events (as indicated in the \color{red}{\verb|EVTYPE|}EVTYPE variable) are most harmful with respect to population health?
+    
+#Across the United States, which types of events have the greatest economic consequences?
+
+#Across the US, which types of events are most harmful with respect to population health?
+
+```{r}
+fatalities_byevent <- aggregate(FATALITIES ~ EVTYPE, data = NOAA_data, mean, na.rm = TRUE)
+injuries_byevent <- aggregate(INJURIES ~ EVTYPE, data = NOAA_data, mean, na.rm = TRUE)
+summary(fatalities_byevent)
+summary(injuries_byevent)
+max(fatalities_byevent$FATALITIES)
+max(injuries_byevent$INJURIES)
+fatalities_byevent$EVTYPE[which.max(fatalities_byevent$FATALITIES)]
+injuries_byevent$EVTYPE[which.max(injuries_byevent$INJURIES)]
+```
+
+#Across the US, which types of events have the greatest economic consequences?
+```{r, cache=TRUE}
+
+```
+
