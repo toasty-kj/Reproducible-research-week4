@@ -1,5 +1,6 @@
 ---
 title: "Reproducible research course project week4"
+Synopsis: 
 author: "Koji"
 date: "2021/11/15"
 output: 
@@ -21,26 +22,15 @@ path <- getwd()
 url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
 download.file(url, file.path(path, "NOAA_data.csv.bz2"))
 NOAA_data <- read.csv("NOAA_data.csv.bz2")
-summary(NOAA_data)
-head(NOAA_data, 5)
 names(NOAA_data)
 ```
-
-#Across the United States, which types of events (as indicated in the \color{red}{\verb|EVTYPE|}EVTYPE variable) are most harmful with respect to population health?
-    
-#Across the United States, which types of events have the greatest economic consequences?
-
+## Data Processing
 #Across the US, which types of events are most harmful with respect to population health?
 #calculate mean value for each event type by aggregate function
 ```{r, cache=TRUE}
 fatalities_byevent <- aggregate(FATALITIES ~ EVTYPE, data = NOAA_data, mean, na.rm = TRUE)
 injuries_byevent <- aggregate(INJURIES ~ EVTYPE, data = NOAA_data, mean, na.rm = TRUE)
-summary(fatalities_byevent)
-summary(injuries_byevent)
-max(fatalities_byevent$FATALITIES)
-max(injuries_byevent$INJURIES)
-fatalities_byevent$EVTYPE[which.max(fatalities_byevent$FATALITIES)]
-injuries_byevent$EVTYPE[which.max(injuries_byevent$INJURIES)]
+
 ```
 
 #Across the US, which types of events have the greatest economic consequences?
@@ -74,10 +64,20 @@ summary(propdmg_byevent)
 summary(cropdmg_byevent)
 ```
 
+##Results
+#Across the US, which types of events are most harmful with respect to population health?
+```{r, cache=TRUE}
+summary(fatalities_byevent)
+summary(injuries_byevent)
+max(fatalities_byevent$FATALITIES)
+max(injuries_byevent$INJURIES)
+fatalities_byevent$EVTYPE[which.max(fatalities_byevent$FATALITIES)]
+injuries_byevent$EVTYPE[which.max(injuries_byevent$INJURIES)]
+```
+
 #find which types of event have the greatest economic consequences
 ```{r, cache=TRUE}
 propdmg_byevent$EVTYPE[which.max(propdmg_byevent$PROPDMGNM)]
 cropdmg_byevent$EVTYPE[which.max(cropdmg_byevent$CROPDMGNM)]
-
 ```
 
