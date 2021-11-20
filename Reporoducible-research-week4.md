@@ -1,6 +1,6 @@
 ---
-title: "Reproducible research course project week4"
-Synopsis: 
+title: "NOAA Storm Data Analysis"
+Synopsis: I conducted an anlysis on NOAA storm data. I found that natural events related to land likely cause property damage. Storm and extream temparature are related to crop damage. They are also related to fatalities as well. High temparature such as Heat wave migh also cause injuries in addition to those events.
 author: "Koji"
 date: "2021/11/15"
 output: 
@@ -146,17 +146,16 @@ cropdmg_byevent_desc <- arrange(cropdmg_byevent, desc(CROPDMGNM))
 ```r
 top10_events_prop <- head(propdmg_byevent_desc, 10)
 
-ggplot(top10_events_prop, aes(reorder(EVTYPE,PROPDMGNM),PROPDMGNM))+ geom_col(aes(fill = PROPDMGNM)) + scale_fill_gradient2(low = "white", high = "blue") + coord_flip() + theme_classic() + labs(y = "Property damage", x = "Event Type") + ggtitle("Top10 events caused highest PROPERTY damage")
+p1 <- ggplot(top10_events_prop, aes(reorder(EVTYPE,PROPDMGNM),PROPDMGNM))+ geom_col(aes(fill = PROPDMGNM)) + scale_fill_gradient2(low = "white", high = "blue") + coord_flip() + theme_classic() + labs(y = "Property damage", x = "Event Type") + ggtitle("Top10 events caused highest PROPERTY damage")
 ```
-
-![](Reporoducible-research-week4_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 #Top10 events caused highest crop damage
 
 
 ```r
 top10_events_crops <- head(arrange(cropdmg_byevent,desc(CROPDMGNM)), 10)
-ggplot(top10_events_crops, aes(reorder(EVTYPE,CROPDMGNM),CROPDMGNM))+ geom_col(aes(fill = CROPDMGNM)) + scale_fill_gradient2(low = "white", high = "red") + coord_flip() + theme_classic() + labs(y = "Crop damage", x = "Event Type") + ggtitle("Top10 events caused highest CROP damage")
+p2 <- ggplot(top10_events_crops, aes(reorder(EVTYPE,CROPDMGNM),CROPDMGNM))+ geom_col(aes(fill = CROPDMGNM)) + scale_fill_gradient2(low = "white", high = "red") + coord_flip() + theme_classic() + labs(y = "Crop damage", x = "Event Type") + ggtitle("Top10 events caused highest CROP damage")
+grid.arrange(p1, p2, ncol = 1)
 ```
 
 ![](Reporoducible-research-week4_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
@@ -166,16 +165,15 @@ ggplot(top10_events_crops, aes(reorder(EVTYPE,CROPDMGNM),CROPDMGNM))+ geom_col(a
 
 ```r
 top10_events_fatalities <- head(arrange(fatalities_byevent, desc(FATALITIES)), 10)
-ggplot(top10_events_fatalities, aes(reorder(EVTYPE,FATALITIES),FATALITIES))+ geom_col(aes(fill = FATALITIES)) + scale_fill_gradient2(low = "white", high = "black") + coord_flip() + theme_classic() + labs(y = "FATALITIES", x = "Event Type") + ggtitle("Top10 harmful events with FATALITIES")
+p3 <- ggplot(top10_events_fatalities, aes(reorder(EVTYPE,FATALITIES),FATALITIES))+ geom_col(aes(fill = FATALITIES)) + scale_fill_gradient2(low = "white", high = "black") + coord_flip() + theme_classic() + labs(y = "FATALITIES", x = "Event Type") + ggtitle("Top10 harmful events with FATALITIES")
 ```
-
-![](Reporoducible-research-week4_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 #Top10 harmful events with INJURIES
 
 
 ```r
 top10_events_injuries <- head(arrange(injuries_byevent, desc(INJURIES)), 10)
-ggplot(top10_events_injuries, aes(reorder(EVTYPE,INJURIES),INJURIES))+ geom_col(aes(fill = INJURIES)) + scale_fill_gradient2(low = "white", high = "purple") + coord_flip() + theme_classic() + labs(y = "INJURIES", x = "Event Type") + ggtitle("Top10 harmful events with INJURIES")
+p4 <- ggplot(top10_events_injuries, aes(reorder(EVTYPE,INJURIES),INJURIES))+ geom_col(aes(fill = INJURIES)) + scale_fill_gradient2(low = "white", high = "purple") + coord_flip() + theme_classic() + labs(y = "INJURIES", x = "Event Type") + ggtitle("Top10 harmful events with INJURIES")
+grid.arrange(p3, p4, ncol = 1)
 ```
 
 ![](Reporoducible-research-week4_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
