@@ -1,12 +1,14 @@
 ---
 title: "NOAA Storm Data Analysis"
-Synopsis: I conducted an anlysis on NOAA storm data. I found that natural events related to land likely cause property damage. Storm and extream temparature are related to crop damage. They are also related to fatalities as well. High temparature such as Heat wave migh also cause injuries in addition to those events.
 author: "Koji"
 date: "2021/11/15"
 output: 
   html_document: 
     keep_md: true
 ---
+
+# Synopsis
+I conducted an anlysis on NOAA storm data. I found that natural events related to land likely cause property damage. Storm and extream temparature are related to crop damage. They are also related to fatalities as well. High temparature such as Heat wave migh also cause injuries in addition to those events.
 
 
 
